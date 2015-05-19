@@ -83,6 +83,9 @@
       _.each(this.get(rowIndex),function(item,i) {
         if (item === 1) {
           pieces++;
+          if (pieces > 1) {
+            return true;
+          }
         }
       })
       return pieces > 1;
@@ -112,6 +115,9 @@
         var row = this.get(i)
         if (row[colIndex] === 1) {
           pieces++;
+          if (pieces > 1) {
+            return true;
+          }
         }
       }
       return pieces > 1;
@@ -137,14 +143,51 @@
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
       var pieces = 0;
 
-      var n = this.get('n')
-      for (var x = 0; x < n; x++ ) {
-        var y = x + majorDiagonalColumnIndexAtFirstRow;
-        if (this._isInBounds(x,y)) {
-          var row = this.get(x);
-          var value = row[y];
-          if (value === 1) {
-            pieces++;
+      /*//col -1
+      var countCheck = n - 1
+      var 0 = (1,0)
+      var 1 = (2,1)
+      var y = x - 1
+
+      //col -2
+      var countCheck = n - 2
+      var 0 = (2,0)
+      var y = x - 2
+
+      //col 0
+      var countCheck = n
+      var 0 = (0,0)
+      var 1 = (1,1)
+      var 2 = (2,2)
+      var y = x
+
+      //col 1
+      var countCheck = n - 1
+      var 0 = (0,1)
+      var 1 = (1,2)
+      var y = x + 1
+
+      //col 2
+      var countCheck = n - 2
+      var 0 = (0,2)
+      var y = x + 2
+
+      //col n
+      var countCheck = n - 2
+      var 0 = (0,2)
+      var y = x + 2*/
+
+      var length = this.get('n') - Math.abs(majorDiagonalColumnIndexAtFirstRow);
+      var yOffset = majorDiagonalColumnIndexAtFirstRow
+      for (var i = 0; i < length; i++ ) {
+        var x = majorDiagonalColumnIndexAtFirstRow >= 0 ? i : i - majorDiagonalColumnIndexAtFirstRow;
+        var y = x + yOffset;
+        var row = this.get(x);
+        var value = row[y];
+        if (value === 1) {
+          pieces++;
+          if (pieces > 1) {
+            return true;
           }
         }
       }
@@ -182,9 +225,60 @@
           var value = row[y];
           if (value === 1) {
             pieces++;
+            if (pieces > 1) {
+              return true;
+            }
           }
         }
       }
+
+      // //col 3
+      // var countCheck = n - 1
+      // var 1 = (2,1)
+      // var 2 = (1,2)
+      // var y = -x + 3
+
+      // //col 4
+      // var countCheck = n - 2
+      // var 2 = (2,2)
+      // var y = -x + 4
+
+      // //col 2
+      // var countCheck = n
+      // var 0 = (0,2)
+      // var 1 = (1,1)
+      // var 2 = (2,0)
+      // var y = -x + 2
+
+      // //col 1
+      // var countCheck = n - 1
+      // var 0 = (0,1)
+      // var 1 = (1,0)
+      // var y = -x + 1
+
+      // //col 0
+      // var countCheck = n - 2
+      // var 0 = (0,0)
+      // var y = -x
+
+      // col n
+      // var countCheck = n + 1
+      // var y = -x + colIndex
+
+      // var length = minorDiagonalColumnIndexAtFirstRow <= this.get('n') ? minorDiagonalColumnIndexAtFirstRow + 1 : this.get('n') - minorDiagonalColumnIndexAtFirstRow + 2;
+      // var yOffset = minorDiagonalColumnIndexAtFirstRow
+      // for (var i = 0; i < length; i++ ) {
+      //   var x = minorDiagonalColumnIndexAtFirstRow < this.get('n') ? this.get('n') - minorDiagonalColumnIndexAtFirstRow - 1 + i : i + minorDiagonalColumnIndexAtFirstRow - this.get('n') + (this.get('n') - 1);
+      //   var y = -x + yOffset;
+      //   var row = this.get(x);
+      //   var value = row[y];
+      //   if (value === 1) {
+      //     pieces++;
+      //     if (pieces > 1) {
+      //       return true;
+      //     }
+      //   }
+      // }
 
       return pieces > 1;
     },
